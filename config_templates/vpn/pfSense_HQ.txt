@@ -1,0 +1,6 @@
+# pfSense HQ - manual config in GUI
+# TOSW IP: {{hq_public_ip}}
+# LAN IP: {{hq_lan_router}}
+# LAN Subnet: {{hq_lan_subnet}}/{{prefix}}
+# IPsec Peer: {{branch_public_ip}}
+# Remote LAN: {{branch_lan_subnet}}/{{prefix}}

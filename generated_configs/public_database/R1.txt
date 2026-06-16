@@ -1,0 +1,24 @@
+hostname R1
+!
+no ip domain-lookup
+!
+interface GigabitEthernet1/0
+ description WAN_Internet
+ ip address 203.0.113.1 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet2/0
+ description MGMT
+ ip address 10.50.187.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet3/0
+ description LAN_to_Switch
+ ip address 10.78.145.1 255.255.255.0
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet1/0
+ip route 10.50.187.0 255.255.255.0 GigabitEthernet2/0
+ip route 10.78.145.0 255.255.255.0 GigabitEthernet3/0
+!
+end

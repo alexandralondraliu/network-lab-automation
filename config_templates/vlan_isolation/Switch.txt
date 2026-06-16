@@ -1,0 +1,38 @@
+hostname Switch
+!
+no ip domain-lookup
+!
+vlan {{vlan1_id}}
+ name {{dept_1_slug}}
+!
+vlan {{vlan2_id}}
+ name {{dept_2_slug}}
+!
+vlan {{vlan3_id}}
+ name {{dept_3_slug}}
+!
+interface GigabitEthernet0/0
+ description trunk_to_R1
+ switchport mode trunk
+ switchport trunk allowed vlan {{vlan1_id}},{{vlan2_id}},{{vlan3_id}}
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description to_PC1_{{dept_1_slug}}
+ switchport mode access
+ switchport access vlan {{vlan1_id}}
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description to_PC3_{{dept_3_slug}}
+ switchport mode access
+ switchport access vlan {{vlan3_id}}
+ no shutdown
+!
+interface GigabitEthernet0/3
+ description to_PC2_{{dept_2_slug}}
+ switchport mode access
+ switchport access vlan {{vlan2_id}}
+ no shutdown
+!
+end

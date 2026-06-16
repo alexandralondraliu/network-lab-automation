@@ -1,0 +1,22 @@
+hostname Switch1
+!
+no ip domain-lookup
+!
+vlan {{vlan_id}}
+ name LAN_VLAN
+!
+spanning-tree vlan {{vlan_id}} priority 4096
+!
+interface GigabitEthernet0/0
+ description to_PC1
+ switchport mode access
+ switchport access vlan {{vlan_id}}
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description trunk_to_Switch2
+ switchport mode trunk
+ switchport trunk allowed vlan {{vlan_id}}
+ no shutdown
+!
+end

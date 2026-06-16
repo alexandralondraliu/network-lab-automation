@@ -1,0 +1,5 @@
+# pfSense - cmanual config in GUI
+# Client subnet: {{client_subnet}}/{{prefix}}
+# Server subnet: {{server_subnet}}/{{prefix}}
+# Server IP: {{server_ip}}
+# Server type: {{server_type}}

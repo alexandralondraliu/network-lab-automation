@@ -1,0 +1,14 @@
+hostname DNS_Server
+!
+no ip domain-lookup
+!
+ip dns server
+!
+ip host {{internal_domain}} {{pc1_ip}}
+!
+interface GigabitEthernet1/0
+ description to_Switch
+ ip address {{trusted_dns}} {{subnet_mask}}
+ no shutdown
+!
+end

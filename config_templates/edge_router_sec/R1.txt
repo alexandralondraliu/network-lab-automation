@@ -1,0 +1,17 @@
+hostname R1
+!
+no ip domain-lookup
+!
+interface GigabitEthernet1/0
+ description inside_LAN
+ ip address {{router_lan_ip}} {{subnet_mask}}
+ no shutdown
+!
+interface GigabitEthernet2/0
+ description outside_WAN
+ ip address dhcp
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet2/0
+!
+end

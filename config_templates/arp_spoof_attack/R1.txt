@@ -1,0 +1,26 @@
+hostname R1
+!
+no ip domain-lookup
+!
+ip dhcp excluded-address {{gateway_ip}}
+ip dhcp excluded-address {{attacker_ip}}
+!
+ip dhcp pool LAN_POOL
+ network {{subnet}} {{subnet_mask}}
+ default-router {{gateway_ip}}
+ dns-server 8.8.8.8
+ lease 0 2
+!
+interface Gi1/0
+ description LAN
+ ip address {{gateway_ip}} {{subnet_mask}}
+ no shutdown
+!
+interface Gi2/0
+ description WAN
+ ip address dhcp
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 Gi2/0
+!
+end

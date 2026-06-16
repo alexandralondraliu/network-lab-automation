@@ -1,0 +1,10 @@
+{
+    "scenario_name": "Neutralizing ARP Spoofing Attacks",
+    "base_template": "On May 15, 2024, the Aerospace Division's Ground Control Systems team detected an ARP spoofing attack originating from a rogue device bypassing VLAN 40. The intrusion originated from a compromised workstation with MAC address 08:00:27:a0:7e:d1, flooding the network with falsified ARP replies to redirect traffic to an unauthorized gateway (10.45.12.1). Critical telemetry data for satellite tracking was intermittently redirected, causing temporary loss of real-time monitoring.",
+    "generation_rules": {
+        "department": "Aerospace Division - Ground Control Systems",
+        "gateway_ip": "10.45.12.1",
+        "attacker_mac": "08:00:27:a0:7e:d1"
+    },
+    "expected_solution": "Enable 'ip arp inspection' on the affected VLAN and ensure DHCP snooping is active to provide the binding database."
+}

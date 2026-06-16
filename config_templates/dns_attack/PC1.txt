@@ -1,0 +1,2 @@
+ip {{pc1_ip}} {{r1_lan_ip}} {{prefix}}
+save

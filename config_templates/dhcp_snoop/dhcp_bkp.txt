@@ -1,0 +1,17 @@
+hostname DHCP-BKP
+!
+no ip domain-lookup
+!
+! Pool rogue - da IP-uri gresite clientilor
+ip dhcp pool ROGUE_POOL
+ network {{subnet}} {{subnet_mask}}
+ default-router {{rogue_ip}}
+ dns-server {{rogue_ip}}
+ lease 0 1
+!
+interface FastEthernet0/0
+ description toward_R1
+ ip address {{rogue_ip}} {{subnet_mask}}
+ no shutdown
+!
+end

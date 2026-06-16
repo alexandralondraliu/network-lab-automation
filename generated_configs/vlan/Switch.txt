@@ -1,0 +1,38 @@
+hostname Switch
+!
+no ip domain-lookup
+!
+vlan 22
+ name Quantum_Research
+!
+vlan 78
+ name Neural_Analytics
+!
+vlan 123
+ name Secure_Financial_Ledger
+!
+interface GigabitEthernet0/0
+ description trunk_to_R1
+ switchport mode trunk
+ switchport trunk allowed vlan 22,78,123
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description to_PC1_Quantum_Research
+ switchport mode access
+ switchport access vlan 22
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description to_PC3_Secure_Financial_Ledger
+ switchport mode access
+ switchport access vlan 123
+ no shutdown
+!
+interface GigabitEthernet0/3
+ description to_PC2_Neural_Analytics
+ switchport mode access
+ switchport access vlan 78
+ no shutdown
+!
+end

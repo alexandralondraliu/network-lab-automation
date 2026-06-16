@@ -1,0 +1,75 @@
+{
+  "lab_id": "vlan_hopp",
+  "project_id": "ccb9d71e-d5af-4033-9aba-3f2c973ff9cf",
+  "nodes": {
+    "Switch1": {
+      "template": "Switch1.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "Switch2": {
+      "template": "Switch2.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "PC_Guest": {
+      "template": "PC_Guest.txt",
+      "type": "alma"
+    },
+    "PC1": {
+      "template": "PC1.txt",
+      "type": "vpcs"
+    }
+  },
+  "build": {
+    "from_llm": [
+      "guest_id",
+      "admin_id",
+      "switch_a",
+      "switch_b"
+    ],
+    "derived": []
+  },
+  "verify": [
+    {
+      "node": "Switch1",
+      "command": "show running-config | include nonegotiate",
+      "checks": [
+        {
+          "label": "DTP disabled on Switch1 (nonegotiate)",
+          "contains": "nonegotiate"
+        }
+      ]
+    },
+    {
+      "node": "Switch1",
+      "command": "show running-config | include native vlan",
+      "checks": [
+        {
+          "label": "Native VLAN changed from VLAN Guest on Switch1",
+          "not_contains": "native vlan {{guest_id}}"
+        }
+      ]
+    },
+    {
+      "node": "Switch2",
+      "command": "show running-config | include nonegotiate",
+      "checks": [
+        {
+          "label": "DTP disabled on Switch2 (nonegotiate)",
+          "contains": "nonegotiate"
+        }
+      ]
+    },
+    {
+      "node": "Switch2",
+      "command": "show running-config | include native vlan",
+      "checks": [
+        {
+          "label": "Native VLAN changed from VLAN Guest on Switch2",
+          "not_contains": "native vlan {{guest_id}}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "lab_id": "arp_spoof_attack",
+  "project_id": "8f8fbf6d-bf8e-4c01-a769-3801d1c3cfea",
+  "nodes": {
+    "R1":     {"template": "R1.txt",  "type": "cisco"},
+    "Switch": {"template": "sw.txt",  "type": "cisco"},
+    "PC1":    {"template": "pc1.txt", "type": "vpcs"},
+    "PC2":    {"template": "pc2.txt", "type": "alma"},
+    "PC3":    {"template": "pc3.txt", "type": "vpcs"}
+  },
+  "build": {
+    "from_llm": ["gateway_ip", "attacker_mac", "department"],
+    "derived": [
+      {"key": "subnet",      "type": "network_address", "from": "gateway_ip", "prefix": "24"},
+      {"key": "subnet_mask", "type": "netmask",         "from": "gateway_ip", "prefix": "24"},
+      {"key": "prefix",      "type": "static",          "value": "24"},
+      {"key": "attacker_ip", "type": "ip_offset",       "from": "gateway_ip", "offset": 50},
+      {"key": "victim1_ip",  "type": "ip_offset",       "from": "gateway_ip", "offset": 10},
+      {"key": "victim2_ip",  "type": "ip_offset",       "from": "gateway_ip", "offset": 20},
+      {"key": "dhcp_start",  "type": "ip_offset",       "from": "gateway_ip", "offset": 100},
+      {"key": "dhcp_end",    "type": "ip_offset",       "from": "gateway_ip", "offset": 200},
+      {"key": "vlan_id",     "type": "vlan_from_ip",    "from": "gateway_ip", "octet": 1, "fallback": 10},
+      {"key": "vlan_name",   "type": "slugify",         "from": "department"}
+    ]
+  },
+  "verify": [
+    {
+      "node": "Switch",
+      "command": "show ip dhcp snooping",
+      "checks": [
+        {"label": "DHCP Snooping enabled globally",        "contains": "DHCP snooping is enabled"},
+        {"label": "DHCP Snooping on VLAN {{vlan_id}}", "contains": "{{vlan_id}}"}
+      ]
+    },
+    {
+      "node": "Switch",
+      "command": "show ip arp inspection",
+      "checks": [
+        {"label": "ARP Inspection pe VLAN {{vlan_id}}", "contains": "{{vlan_id}}", "also_contains": "Enabled"}
+      ]
+    }
+  ]
+}
+

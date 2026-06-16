@@ -1,0 +1,2 @@
+ip {{server_ip}} {{server_gw}} {{prefix}}
+save

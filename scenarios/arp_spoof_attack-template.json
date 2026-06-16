@@ -1,0 +1,13 @@
+{
+  "scenario_name": "Neutralizing ARP Spoofing Attacks",
+  "base_template": "Write a unique, professional incident report (2-3 sentences) describing an ARP Spoofing attack. Use the generated values for {{department}}, {{attacker_mac}}, and {{gateway_ip}} in the text.",
+  "generation_rules": {
+    "department": {
+      "instruction": "Generate a random company department",
+      "anchor_node": "PC3"
+    },
+    "gateway_ip": "A realistic gateway IP",
+    "attacker_mac": "A random attacker MAC address"
+  },
+  "expected_solution": "Enable 'ip arp inspection' on the affected VLAN and ensure DHCP snooping is active to provide the binding database."
+}

@@ -1,0 +1,43 @@
+{
+  "lab_id": "dns_attack",
+  "project_id": "8dfd224c-82f7-4722-944b-e78327174ae4",
+  "nodes": {
+    "R1":         {"template": "R1.txt",         "type": "cisco"},
+    "Switch":     {"template": "Switch.txt",     "type": "cisco", "role": "switch"},
+    "PC1":        {"template": "PC1.txt",        "type": "vpcs"},
+    "DNS_Server": {"template": "DNS_Server.txt", "type": "cisco"}
+  },
+  "build": {
+    "from_llm": ["internal_domain", "phishing_ip", "trusted_dns"],
+    "derived": [
+      {"key": "prefix",      "type": "static",          "value": "24"},
+      {"key": "lan_subnet",  "type": "network_address", "from": "trusted_dns", "prefix": "24"},
+      {"key": "subnet_mask", "type": "netmask",         "from": "trusted_dns", "prefix": "24"},
+      {"key": "r1_lan_ip",   "type": "ip_offset",       "from": "trusted_dns", "offset": 1},
+      {"key": "pc1_ip",      "type": "ip_offset",       "from": "trusted_dns", "offset": 50}
+    ]
+  },
+  "verify": [
+    {
+      "node": "R1",
+      "command": "show running-config | include ip name-server",
+      "checks": [
+        {"label": "DNS set on valid server {{trusted_dns}}", "contains": "{{trusted_dns}}"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | include ip dns server",
+      "checks": [
+        {"label": "ip dns server disabled on R1", "not_contains": "ip dns server"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show ip access-lists",
+      "checks": [
+        {"label": "ACL configured on R1", "contains": "Extended IP access list"}
+      ]
+    }
+  ]
+}

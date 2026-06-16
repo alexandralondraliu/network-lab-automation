@@ -1,0 +1,10 @@
+{
+  "scenario_name": "Control Plane Protection against ICMP Flooding",
+  "base_template": "Write a critical system alert. The Edge Router {{router_name}} is at {{cpu_load}}% CPU load due to a massive ICMP flood targeting {{mgmt_ip}}. Describe the performance degradation of the network.",
+  "generation_rules": {
+    "router_name": { "instruction": "Generate a hostname (e.g., Border-GW, ISP-Link)", "anchor_node": "R1" },
+    "mgmt_ip": "A random management IP (e.g., 172.16.x.x)",
+    "cpu_load": ["94", "97", "99"]
+  },
+  "expected_solution": "Create an Extended ACL to match ICMP traffic and apply it to the 'control-plane' to rate-limit the traffic."
+}

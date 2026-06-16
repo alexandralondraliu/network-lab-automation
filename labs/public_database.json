@@ -1,0 +1,50 @@
+{
+  "lab_id": "public_database",
+  "project_id": "e929393e-3b7d-47ef-ad0e-b08773cb31bb",
+  "nodes": {
+    "R1":           {"template": "R1.txt",           "type": "cisco"},
+    "Switch":       {"template": "Switch.txt",       "type": "cisco", "role": "switch"},
+    "DB_Server":    {"template": "DB_Server.txt",    "type": "vpcs"},
+    "App_Server":   {"template": "App_Server.txt",   "type": "vpcs"},
+    "Internet_PC":  {"template": "Internet_PC.txt",  "type": "alma"},
+    "Mgmt_PC":      {"template": "Mgmt_PC.txt",      "type": "alma"}
+  },
+  "build": {
+    "from_llm": ["db_ip", "mgmt_ip", "db_port"],
+    "derived": [
+      {"key": "prefix",         "type": "static",          "value": "24"},
+      {"key": "subnet_mask",    "type": "netmask",         "from": "db_ip",   "prefix": "24"},
+      {"key": "lan_subnet",     "type": "network_address", "from": "db_ip",   "prefix": "24"},
+      {"key": "router_lan_ip",  "type": "ip_offset",       "from": "db_ip",   "offset": 1},
+      {"key": "app_server_ip",  "type": "ip_offset",       "from": "db_ip",   "offset": 20},
+      {"key": "mgmt_subnet",    "type": "network_address", "from": "mgmt_ip", "prefix": "24"},
+      {"key": "mgmt_mask",      "type": "netmask",         "from": "mgmt_ip", "prefix": "24"},
+      {"key": "router_mgmt_ip", "type": "ip_offset",       "from": "mgmt_ip", "offset": 1},
+      {"key": "mgmt_pc_ip",     "type": "ip_offset",       "from": "mgmt_ip", "offset": 10}
+    ]
+  },
+  "verify": [
+    {
+      "node": "R1",
+      "command": "show running-config | include {{db_ip}}",
+      "checks": [
+        {"label": "DB_Server {{db_ip}} present in ACL", "contains": "{{db_ip}}"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show ip access-lists",
+      "checks": [
+        {"label": "Port {{db_port}} restricted in ACL", "contains": "{{db_port}}"},
+        {"label": "Denied traffic logged",     "contains": "log"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | section interface GigabitEthernet1/0",
+      "checks": [
+        {"label": "ACL aplied on inbound WAN port(g1/0)", "contains": "ip access-group"}
+      ]
+    }
+  ]
+}

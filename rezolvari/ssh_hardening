@@ -1,0 +1,8 @@
+crypto key generate rsa modulus 2048
+ip ssh version 2
+ip ssh time-out {{timeout}}
+ip ssh authentication-retries {{retries}}
+
+line vty 0 4
+ exec-timeout {{timeout}} 0
+ transport input ssh

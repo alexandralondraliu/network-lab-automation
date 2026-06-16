@@ -1,0 +1,26 @@
+hostname R1
+!
+no ip domain-lookup
+!
+ip dhcp excluded-address 10.45.12.1
+ip dhcp excluded-address 10.45.12.50
+!
+ip dhcp pool LAN_POOL
+ network 10.45.12.0 255.255.255.0
+ default-router 10.45.12.1
+ dns-server 8.8.8.8
+ lease 0 2
+!
+interface Gi1/0
+ description LAN
+ ip address 10.45.12.1 255.255.255.0
+ no shutdown
+!
+interface Gi2/0
+ description WAN
+ ip address dhcp
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 Gi2/0
+!
+end

@@ -1,0 +1,2 @@
+ip {{db_ip}} {{router_lan_ip}} 24
+save

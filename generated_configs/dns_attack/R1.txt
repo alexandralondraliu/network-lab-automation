@@ -1,0 +1,12 @@
+hostname R1
+!
+no ip domain-lookup
+!
+ip name-server 185.143.223.112
+!
+interface GigabitEthernet1/0
+ description LAN_to_Switch
+ ip address 10.7.2.1 255.255.255.0
+ no shutdown
+!
+end

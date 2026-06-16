@@ -1,0 +1,2 @@
+ip {{branch_pc_ip}} {{branch_lan_router}} {{prefix}}
+save

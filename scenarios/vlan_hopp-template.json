@@ -1,0 +1,13 @@
+{
+  "scenario_name": "Defeating VLAN Hopping and Double Tagging Attacks",
+  "base_template": "Write a technical security alert (2-3 sentences) explaining how an attacker in the Guest segment (VLAN {{guest_id}}) is attempting to bypass security to reach the Admin segment (VLAN {{admin_id}}) using double-tagging. Mention the switches {{switch_a}} and {{switch_b}}.",
+  "generation_rules": {
+    "guest_name": { "instruction": "A name for the guest VLAN (e.g. Guest, Visitors)", "anchor_node": "PC_Guest" },
+    "admin_name": { "instruction": "A name for the admin VLAN (e.g. Admin, Management)", "anchor_node": "PC1" },
+    "guest_id": { "instruction": "Generate a high VLAN ID between 100 and 200 (integer)" },
+    "admin_id": { "instruction": "Generate a management VLAN ID between 10 and 50 (integer)" },
+    "switch_a": "Dist-SW1",
+    "switch_b": "Core-SW1"
+  },
+  "expected_solution": "Change native VLAN on both trunk ports to an unused VLAN (e.g. 999) and add switchport nonegotiate to disable DTP."
+}

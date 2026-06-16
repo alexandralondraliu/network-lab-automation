@@ -1,0 +1,50 @@
+{
+  "lab_id": "ssh_hardening",
+  "project_id": "af6f64fe-b65a-4eb5-96c4-93b77e08d080",
+  "nodes": {
+    "R1":     {"template": "R1.txt",     "type": "cisco"},
+    "Switch": {"template": "Switch.txt", "type": "cisco", "role": "switch"},
+    "PC":     {"template": "PC.txt",     "type": "alma"}
+  },
+  "build": {
+    "from_llm": ["company_domain", "router_name", "timeout", "retries", "lan_ip"],
+    "derived": [
+      {"key": "prefix",        "type": "static",    "value": "24"},
+      {"key": "subnet_mask",   "type": "netmask",   "from": "lan_ip", "prefix": "24"},
+      {"key": "router_lan_ip", "type": "ip_offset", "from": "lan_ip", "offset": 1},
+      {"key": "admin_ip",      "type": "ip_offset", "from": "lan_ip", "offset": 10}
+    ]
+  },
+  "verify": [
+    {
+      "node": "R1",
+      "command": "show ip ssh",
+      "checks": [
+        {"label": "SSH enabled on router", "contains": "SSH Enabled"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | include ip ssh version",
+      "checks": [
+        {"label": "SSH version 2 configured", "contains": "2"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | section line vty",
+      "checks": [
+        {"label": "VTY accepts only SSH",           "contains":     "transport input ssh"},
+        {"label": "Telnet disabled on VTY",       "not_contains": "transport input telnet"},
+        {"label": "exec-timeout configured on VTY", "contains":     "exec-timeout"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | include ip ssh authentication-retries",
+      "checks": [
+        {"label": "Max tries configured", "contains": "{{retries}}"}
+      ]
+    }
+  ]
+}

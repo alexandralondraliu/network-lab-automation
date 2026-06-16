@@ -1,0 +1,3 @@
+ip addr flush dev eth0
+ip addr add {{client_ip}}/{{prefix}} dev eth0
+ip route add default via {{client_gw}}

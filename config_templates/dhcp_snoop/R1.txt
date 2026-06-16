@@ -1,0 +1,21 @@
+hostname R1
+!
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description LAN_toward_Switch
+ ip address {{gateway_ip}} {{subnet_mask}}
+ ip helper-address {{trusted_server_ip}}
+ no shutdown
+!
+interface GigabitEthernet1/0
+ description toward_DHCP-SRV
+ ip address {{srv_link_ip}} {{subnet_mask}}
+ no shutdown
+!
+interface GigabitEthernet2/0
+ description toward_DHCP-BKP
+ ip address {{bkp_link_ip}} {{subnet_mask}}
+ no shutdown
+!
+end

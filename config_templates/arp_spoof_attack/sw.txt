@@ -1,0 +1,32 @@
+hostname Switch
+!
+no ip domain-lookup
+!
+vlan {{vlan_id}}
+ name {{vlan_name}}
+!
+interface GigabitEthernet0/0
+ description PC2_Attacker
+ switchport mode access
+ switchport access vlan {{vlan_id}}
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description PC1_Victim
+ switchport mode access
+ switchport access vlan {{vlan_id}}
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description PC3_Victim
+ switchport mode access
+ switchport access vlan {{vlan_id}}
+ no shutdown
+!
+interface GigabitEthernet0/3
+ description Uplink_R1
+ switchport mode access
+ switchport access vlan {{vlan_id}}
+ no shutdown
+!
+end

@@ -1,0 +1,24 @@
+hostname R1
+!
+no ip domain-lookup
+!
+interface GigabitEthernet1/0
+ description trunk_to_Switch
+ no shutdown
+!
+interface GigabitEthernet1/0.{{vlan1_id}}
+ encapsulation dot1Q {{vlan1_id}}
+ ip address {{router1_ip}} {{subnet_mask}}
+ no shutdown
+!
+interface GigabitEthernet1/0.{{vlan2_id}}
+ encapsulation dot1Q {{vlan2_id}}
+ ip address {{router2_ip}} {{subnet_mask}}
+ no shutdown
+!
+interface GigabitEthernet1/0.{{vlan3_id}}
+ encapsulation dot1Q {{vlan3_id}}
+ ip address {{router3_ip}} {{subnet_mask}}
+ no shutdown
+!
+end

@@ -1,0 +1,14 @@
+{
+  "scenario_name": "Zero Trust VTY Management Access",
+  "base_template": "Write a cybersecurity policy update for the company. Due to brute-force attempts, access to administrative VTY lines is now restricted. Only the Management Station at {{mgmt_ip}} is authorized. Mention that ACL {{acl_number}} will enforce this.",
+  "generation_rules": {
+    "mgmt_ip": {
+      "instruction": "Generate a private management IP (10.x.x.x or 172.16.x.x), last octet between 50 and 150 (avoid .1 and .20)",
+      "anchor_node": "Admin_PC"
+    },
+    "acl_number": {
+      "instruction": "Generate a random number between 1 and 99 (standard ACL range)"
+    }
+  },
+  "expected_solution": "Create standard ACL {{acl_number}} permitting only {{mgmt_ip}}, then apply it to VTY lines with 'access-class {{acl_number}} in'."
+}

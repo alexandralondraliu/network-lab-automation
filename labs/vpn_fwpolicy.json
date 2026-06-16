@@ -1,0 +1,84 @@
+{
+  "lab_id": "vpn_fwpolicy",
+  "project_id": "49ae4d45-4444-46a0-98b6-1c5aac0d3881",
+  "nodes": {
+    "pfSense": {
+      "template": "pfSense.txt",
+      "type": "pfsense"
+    },
+    "Switch": {
+      "template": "Switch.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "Client_PC": {
+      "template": "Client_PC.txt",
+      "type": "alma"
+    },
+    "HQ_Server": {
+      "template": "HQ_Server.txt",
+      "type": "vpcs"
+    }
+  },
+  "build": {
+    "from_llm": [
+      "company_name",
+      "location",
+      "server_type",
+      "server_ip",
+      "client_ip"
+    ],
+    "derived": [
+      {
+        "key": "prefix",
+        "type": "static",
+        "value": "24"
+      },
+      {
+        "key": "server_mask",
+        "type": "netmask",
+        "from": "server_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "client_mask",
+        "type": "netmask",
+        "from": "client_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "server_subnet",
+        "type": "network_address",
+        "from": "server_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "client_subnet",
+        "type": "network_address",
+        "from": "client_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "server_gw",
+        "type": "ip_offset",
+        "from": "server_ip",
+        "offset": 1
+      },
+      {
+        "key": "client_gw",
+        "type": "ip_offset",
+        "from": "client_ip",
+        "offset": 1
+      }
+    ]
+  },
+  "verify": [
+    {
+      "node": "pfSense",
+      "command": "ipsec statusall",
+      "checks": [
+        {"label": "IPsec tunnel established", "contains": "ESTABLISHED"}
+      ]
+    }
+  ]
+}

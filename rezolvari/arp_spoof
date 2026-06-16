@@ -1,0 +1,8 @@
+conf t
+ip dhcp snooping
+ip dhcp snooping vlan <vlan_id>
+ip arp inspection vlan <vlan_id>
+interface GigabitEthernet0/3
+ ip dhcp snooping trust
+ ip arp inspection trust
+end

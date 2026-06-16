@@ -1,0 +1,5 @@
+access-list {{acl_number}} permit {{mgmt_ip}}
+access-list {{acl_number}} deny any
+
+line vty 0 4
+ access-class {{acl_number}} in

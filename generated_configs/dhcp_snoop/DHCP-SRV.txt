@@ -1,0 +1,21 @@
+hostname DHCP-SRV
+!
+no ip domain-lookup
+!
+! Pool legitim pentru clienti
+ip dhcp excluded-address 172.16.45.1
+ip dhcp excluded-address 172.16.45.253
+ip dhcp excluded-address 172.16.45.254
+!
+ip dhcp pool LEGIT_POOL
+ network 172.16.45.0 255.255.255.0
+ default-router 172.16.45.1
+ dns-server 8.8.8.8
+ lease 0 2
+!
+interface FastEthernet0/0
+ description toward_R1
+ ip address 172.16.45.1 255.255.255.0
+ no shutdown
+!
+end

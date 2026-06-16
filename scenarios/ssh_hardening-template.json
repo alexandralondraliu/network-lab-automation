@@ -1,0 +1,12 @@
+{
+  "scenario_name": "Management Plane Hardening: Telnet to SSH Migration",
+  "base_template": "Write a security audit report (3-4 sentences) for {{company_domain}}. Explain that an attacker captured clear-text credentials on {{router_name}} because Telnet was used. Demand a migration to SSH v2 with a {{timeout}} minute timeout and {{retries}} max attempts.",
+  "generation_rules": {
+    "company_domain": { "instruction": "Generate a professional domain (e.g. net-ops.io, secure-core.com)", "anchor_node": "R1" },
+    "router_name": { "instruction": "Generate a router hostname like Core-R1 or Border-GW" },
+    "timeout": { "instruction": "Pick a number: 5, 10, or 15" },
+    "retries": { "instruction": "Pick a number: 2 or 3" },
+    "lan_ip": { "instruction": "A realistic LAN IP address (e.g. 10.x.x.x)" }
+  },
+  "expected_solution": "Generate RSA keys, 'ip ssh version 2', set 'exec-timeout', and 'transport input ssh' on VTY lines."
+}

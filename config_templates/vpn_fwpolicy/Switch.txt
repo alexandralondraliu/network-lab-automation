@@ -1,0 +1,15 @@
+hostname Switch
+!
+no ip domain-lookup
+!
+interface GigabitEthernet0/0
+ description to_pfSense_em2
+ switchport mode access
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description to_HQ_Server
+ switchport mode access
+ no shutdown
+!
+end

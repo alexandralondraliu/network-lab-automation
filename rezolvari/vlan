@@ -1,0 +1,6 @@
+ip access-list extended BLOCK_DEPT1_TO_DEPT3
+ deny ip {{vlan1_subnet}} 0.0.0.255 {{vlan3_subnet}} 0.0.0.255
+ permit ip any any
+
+interface GigabitEthernet1/0.{{vlan1_id}}
+ ip access-group BLOCK_DEPT1_TO_DEPT3 in

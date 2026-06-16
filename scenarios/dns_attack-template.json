@@ -1,0 +1,10 @@
+{
+  "scenario_name": "Remediating DNS Hijacking and Phishing Redirection",
+  "base_template": "Write a critical incident report from the IT Helpdesk (3-4 sentences). Explain that staff trying to access {{internal_domain}} are being redirected to a suspicious phishing site at {{phishing_ip}}. State that the router's DNS settings were compromised and must be pointed back to the trusted server {{trusted_dns}}.",
+  "generation_rules": {
+    "internal_domain": { "instruction": "Generate a unique internal domain (e.g., portal.corp.local, intranet.tech.io)", "anchor_node": "PC1" },
+    "phishing_ip": "Generate a malicious-looking public IP",
+    "trusted_dns": { "instruction": "A standard trusted DNS IP (e.g., 8.8.8.8 or an internal 10.x.x.x)", "anchor_node": "DNS_Server" }
+  },
+  "expected_solution": "Correct the 'ip name-server' entries, disable 'ip dns server' if not needed, and implement an ACL to allow DNS traffic only to trusted servers."
+}

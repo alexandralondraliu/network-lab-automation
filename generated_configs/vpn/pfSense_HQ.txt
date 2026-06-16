@@ -1,0 +1,6 @@
+# pfSense HQ - configurare manuala prin GUI
+# TOSW IP: 203.145.18.47
+# LAN IP: 10.42.1.1
+# LAN Subnet: 10.42.1.0/24
+# IPsec Peer: 203.145.18.1
+# Remote LAN: 172.16.142.0/24

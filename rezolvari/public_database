@@ -1,0 +1,7 @@
+ip access-list extended ACL_DB_PROTECT
+ permit tcp {{mgmt_subnet}} 0.0.0.255 host {{db_ip}} eq {{db_port}}
+ deny tcp any host {{db_ip}} eq {{db_port}} log
+ permit ip any any
+
+interface GigabitEthernet1/0
+ ip access-group ACL_DB_PROTECT in

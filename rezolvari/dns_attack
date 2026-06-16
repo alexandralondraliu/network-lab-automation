@@ -1,0 +1,20 @@
+R1# configure terminal
+
+! 1. Corecteaza DNS-ul catre serverul legitim
+R1(config)# no ip name-server <phishing_ip>
+R1(config)# ip name-server <trusted_dns>
+
+! 2. Dezactiveaza ip dns server (R1 nu trebuie sa fie DNS server)
+R1(config)# no ip dns server
+
+! 3. Implementeaza ACL care permite DNS doar catre trusted server
+R1(config)# ip access-list extended ACL_DNS
+R1(config-ext-nacl)# permit udp any host <trusted_dns> eq 53
+R1(config-ext-nacl)# permit tcp any host <trusted_dns> eq 53
+R1(config-ext-nacl)# deny udp any any eq 53
+R1(config-ext-nacl)# deny tcp any any eq 53
+R1(config-ext-nacl)# permit ip any any
+R1(config-ext-nacl)# exit
+
+R1(config)# end
+R1# write memory

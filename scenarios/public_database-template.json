@@ -1,0 +1,10 @@
+{
+  "scenario_name": "Mitigating Public Database Exposure",
+  "base_template": "Write an urgent developer notification. A database server at {{db_ip}} running on port {{db_port}} was found exposed to the Internet. It must be restricted to the Management Subnet ({{mgmt_ip}}/24) only. All other traffic to port {{db_port}} must be blocked and logged.",
+  "generation_rules": {
+    "db_ip":   { "instruction": "Generate a private LAN IP for a database server (10.x.x.x, last octet 50-150, avoid .1 and .20)", "anchor_node": "DB_Server" },
+    "mgmt_ip": { "instruction": "Generate a management subnet IP (10.50.x.x or 172.16.x.x, last octet 50-150, different /24 from db_ip)", "anchor_node": "Mgmt_PC" },
+    "db_port": { "instruction": "Pick a common database port: 3306 (MySQL), 5432 (PostgreSQL), or 1433 (MSSQL)" }
+  },
+  "expected_solution": "Apply an inbound ACL on GigabitEthernet1/0 to permit mgmt_subnet to db_ip:db_port, and deny+log everything else to db_ip:db_port."
+}

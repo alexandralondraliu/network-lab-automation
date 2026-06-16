@@ -1,0 +1,12 @@
+ip access-list extended ACL_ICMP
+ permit icmp any any
+
+class-map match-all CLASS_ICMP
+ match access-group name ACL_ICMP
+
+policy-map COPP_POLICY
+ class CLASS_ICMP
+  police rate 8000 bps
+
+control-plane
+ service-policy input COPP_POLICY

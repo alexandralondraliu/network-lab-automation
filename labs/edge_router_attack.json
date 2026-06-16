@@ -1,0 +1,44 @@
+{
+  "lab_id": "edge_router_attack",
+  "project_id": "87721984-bc8c-4c68-af7a-7bc8ab861030",
+  "nodes": {
+    "R1":           {"template": "R1.txt",           "type": "cisco"},
+    "Switch":       {"template": "Switch.txt",       "type": "cisco", "role": "switch"},
+    "PC1":          {"template": "PC1.txt",          "type": "vpcs"},
+    "AlmaLinux-1":  {"template": "AlmaLinux.txt",  "type": "alma"}
+  },
+  "build": {
+    "from_llm": ["router_name", "mgmt_ip", "cpu_load"],
+    "derived": [
+      {"key": "prefix",        "type": "static",          "value": "24"},
+      {"key": "subnet_mask",   "type": "netmask",         "from": "mgmt_ip", "prefix": "24"},
+      {"key": "lan_subnet",    "type": "network_address", "from": "mgmt_ip", "prefix": "24"},
+      {"key": "router_lan_ip", "type": "ip_offset",       "from": "mgmt_ip", "offset": 1},
+      {"key": "pc1_ip",        "type": "ip_offset",       "from": "mgmt_ip", "offset": 10},
+      {"key": "attacker_ip",   "type": "ip_offset",       "from": "mgmt_ip", "offset": 20}
+    ]
+  },
+  "verify": [
+    {
+      "node": "R1",
+      "command": "show running-config | section control-plane",
+      "checks": [
+        {"label": "Policy-map applied on control-plane", "contains": "service-policy input"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | include icmp",
+      "checks": [
+        {"label": "ICMP identified in ACL or class-map", "contains": "icmp"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show policy-map control-plane",
+      "checks": [
+        {"label": "Rate-limiting configured on control-plane", "contains": "police"}
+      ]
+    }
+  ]
+}

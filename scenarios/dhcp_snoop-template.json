@@ -1,0 +1,10 @@
+{
+  "scenario_name": "Mitigating Rogue DHCP and MitM Attacks",
+  "base_template": "Write a frantic user complaint from the {{vlan_name}} department. They are getting wrong IP addresses from a rogue server at {{rogue_ip}}, instead of the official server at {{trusted_server_ip}}.",
+  "generation_rules": {
+    "vlan_name": { "instruction": "A creative department name", "anchor_node": "PC1" },
+    "rogue_ip": "A suspicious private IP",
+    "trusted_server_ip": "The legitimate DHCP server IP"
+  },
+  "expected_solution": "Enable IP DHCP Snooping and set the uplink port as trusted."
+}

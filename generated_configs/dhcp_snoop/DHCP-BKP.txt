@@ -1,0 +1,17 @@
+hostname DHCP-BKP
+!
+no ip domain-lookup
+!
+! Pool rogue - da IP-uri gresite clientilor
+ip dhcp pool ROGUE_POOL
+ network 172.16.45.0 255.255.255.0
+ default-router 172.16.45.10
+ dns-server 172.16.45.10
+ lease 0 1
+!
+interface FastEthernet0/0
+ description toward_R1
+ ip address 172.16.45.10 255.255.255.0
+ no shutdown
+!
+end

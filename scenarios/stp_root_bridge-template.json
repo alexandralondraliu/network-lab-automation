@@ -1,0 +1,17 @@
+{
+  "scenario_name": "STP Root Bridge Attack",
+  "base_template": "Write a real-time monitoring alert describing network instability in the {{location}} area. Explain that a rogue device has claimed to be the Spanning Tree Root with priority {{priority}}, affecting VLAN {{vlan_id}}. Describe the impact on network traffic.",
+  "generation_rules": {
+    "location": {
+      "instruction": "Generate a room or office name (e.g. Server Room A, Floor 3 East Wing)",
+      "anchor_node": "AlmaLinux-1"
+    },
+    "vlan_id": {
+      "instruction": "Generate a random VLAN ID between 10 and 100 (integer)"
+    },
+    "priority": {
+      "instruction": "Generate an STP priority lower than 32768, e.g. 0 or 4096"
+    }
+  },
+  "expected_solution": "Enable BPDU Guard on access ports (Gi0/1, Gi0/2) and Root Guard on the uplink port (Gi0/0) of CiscoIOSvL2-1."
+}

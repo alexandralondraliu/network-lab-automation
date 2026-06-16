@@ -1,0 +1,41 @@
+{
+  "lab_id": "dhcp_snoop",
+  "project_id": "25d8e8f4-18ab-4423-a60f-663a190acd2d",
+  "nodes": {
+    "R1":       {"template": "r1.txt",       "type": "cisco"},
+    "Switch":   {"template": "switch.txt",   "type": "cisco"},
+    "PC1":      {"template": "pc1.txt",      "type": "vpcs"},
+    "PC2":      {"template": "pc2.txt",      "type": "vpcs"},
+    "DHCP-SRV": {"template": "dhcp_srv.txt", "type": "cisco"},
+    "DHCP-BKP": {"template": "dhcp_bkp.txt", "type": "cisco"}
+  },
+  "build": {
+    "from_llm": ["vlan_name", "rogue_ip", "trusted_server_ip"],
+    "derived": [
+      {"key": "subnet",          "type": "network_address", "from": "trusted_server_ip", "prefix": "24"},
+      {"key": "subnet_mask",     "type": "netmask",         "from": "trusted_server_ip", "prefix": "24"},
+      {"key": "prefix",          "type": "static",          "value": "24"},
+      {"key": "gateway_ip",      "type": "ip_offset",       "from": "trusted_server_ip", "offset": 1},
+      {"key": "dhcp_pool_start", "type": "ip_offset",       "from": "trusted_server_ip", "offset": 100},
+      {"key": "dhcp_pool_end",   "type": "ip_offset",       "from": "trusted_server_ip", "offset": 200},
+      {"key": "srv_link_ip",     "type": "ip_offset",       "from": "trusted_server_ip", "offset": 253},
+      {"key": "bkp_link_ip",     "type": "ip_offset",       "from": "trusted_server_ip", "offset": 254},
+      {"key": "vlan_id",         "type": "vlan_from_ip",    "from": "trusted_server_ip", "octet": 1, "fallback": 10},
+      {"key": "vlan_name_slug",  "type": "slugify",         "from": "vlan_name"}
+    ]
+  },
+  "verify": [
+    {
+      "node": "Switch",
+      "command": "show ip dhcp snooping",
+      "checks": [
+        {"label": "DHCP Snooping enabled globally",        "contains": "DHCP snooping is enabled"},
+        {
+            "label": "DHCP Snooping on VLAN {{vlan_id}}",
+            "contains": "{{vlan_id}}",
+            "also_contains": "DHCP snooping is configured on following VLANs"
+        }
+      ]
+    }
+  ]
+}

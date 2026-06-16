@@ -1,0 +1,14 @@
+hostname DNS_Server
+!
+no ip domain-lookup
+!
+ip dns server
+!
+ip host procurement.aerospace-eng.dev 10.7.2.50
+!
+interface GigabitEthernet1/0
+ description to_Switch
+ ip address 10.7.2.5 255.255.255.0
+ no shutdown
+!
+end

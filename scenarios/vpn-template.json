@@ -1,0 +1,24 @@
+{
+  "scenario_name": "Secure Branch Interconnection",
+  "base_template": "Describe a business expansion for {{company_name}} into the city of {{location}}. The HQ network ({{hq_lan_subnet}}/24) and the Branch network ({{branch_lan_subnet}}/24) have been set up but cannot communicate. Investigate and establish secure encrypted connectivity between the two sites.",
+  "generation_rules": {
+    "company_name": {
+      "instruction": "Generate a creative tech company name"
+    },
+    "location": {
+      "instruction": "A random world capital city",
+      "anchor_node": "pfSense_Branch"
+    },
+    "hq_public_ip": {
+      "instruction": "A random public-looking IP (e.g. 203.x.x.x, 185.x.x.x), last octet between 2-50",
+      "anchor_node": "pfSense_HQ"
+    },
+    "hq_lan_ip": {
+      "instruction": "A private LAN IP in 10.x.x.x range, last octet between 50-150"
+    },
+    "branch_lan_ip": {
+      "instruction": "A private LAN IP in 172.16.x.x range, last octet between 50-150"
+    }
+  },
+  "expected_solution": "Configure pfSense interfaces (WAN/LAN IPs), then set up IPsec Site-to-Site VPN with IKEv2, AES-256, SHA-256, and matching firewall rules on both firewalls."
+}

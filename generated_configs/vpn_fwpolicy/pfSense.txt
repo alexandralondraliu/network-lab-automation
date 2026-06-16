@@ -1,0 +1,5 @@
+# pfSense - configurare manuala prin GUI
+# Client subnet: 192.168.45.0/24
+# Server subnet: 10.24.89.0/24
+# Server IP: 10.24.89.112
+# Server type: Internal Web Portal

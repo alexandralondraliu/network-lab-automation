@@ -1,0 +1,15 @@
+hostname Edge-Border-03
+!
+no ip domain-lookup
+!
+interface Loopback0
+ description Management
+ ip address 172.18.42.10 255.255.255.255
+ no shutdown
+!
+interface FastEthernet0/0
+ description LAN_to_Switch
+ ip address 172.18.42.1 255.255.255.0
+ no shutdown
+!
+end

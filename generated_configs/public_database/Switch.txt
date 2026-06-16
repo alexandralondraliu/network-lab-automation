@@ -1,0 +1,20 @@
+hostname Switch
+!
+no ip domain-lookup
+!
+interface GigabitEthernet0/0
+ description to_R1
+ switchport mode access
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description to_DB_Server
+ switchport mode access
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description to_App_Server
+ switchport mode access
+ no shutdown
+!
+end

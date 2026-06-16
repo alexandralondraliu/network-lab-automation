@@ -1,0 +1,21 @@
+hostname DHCP-SRV
+!
+no ip domain-lookup
+!
+! Pool legitim pentru clienti
+ip dhcp excluded-address {{gateway_ip}}
+ip dhcp excluded-address {{srv_link_ip}}
+ip dhcp excluded-address {{bkp_link_ip}}
+!
+ip dhcp pool LEGIT_POOL
+ network {{subnet}} {{subnet_mask}}
+ default-router {{gateway_ip}}
+ dns-server 8.8.8.8
+ lease 0 2
+!
+interface FastEthernet0/0
+ description toward_R1
+ ip address {{trusted_server_ip}} {{subnet_mask}}
+ no shutdown
+!
+end

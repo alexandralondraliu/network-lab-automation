@@ -1,0 +1,16 @@
+hostname R1
+!
+no ip domain-lookup
+!
+username admin privilege 15 secret Admin@Lab
+!
+interface GigabitEthernet1/0
+ description LAN_to_Switch
+ ip address {{router_lan_ip}} {{subnet_mask}}
+ no shutdown
+!
+line vty 0 4
+ login local
+ transport input telnet ssh
+!
+end

@@ -1,0 +1,113 @@
+{
+  "lab_id": "vpn",
+  "project_id": "381c2d49-64d9-48c6-a6e4-c4dd79f036d5",
+  "nodes": {
+    "pfSense_HQ": {
+      "template": "pfSense_HQ.txt",
+      "type": "pfsense"
+    },
+    "pfSense_Branch": {
+      "template": "pfSense_Branch.txt",
+      "type": "pfsense"
+    },
+    "Switch": {
+      "template": "Switch.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "HQ_PC": {
+      "template": "HQ_PC.txt",
+      "type": "vpcs"
+    },
+    "Branch_PC": {
+      "template": "Branch_PC.txt",
+      "type": "vpcs"
+    }
+  },
+  "build": {
+    "from_llm": [
+      "company_name",
+      "location",
+      "hq_public_ip",
+      "hq_lan_ip",
+      "branch_lan_ip"
+    ],
+    "derived": [
+      {
+        "key": "prefix",
+        "type": "static",
+        "value": "24"
+      },
+      {
+        "key": "branch_public_ip",
+        "type": "ip_offset",
+        "from": "hq_public_ip",
+        "offset": 1
+      },
+      {
+        "key": "hq_lan_subnet",
+        "type": "network_address",
+        "from": "hq_lan_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "branch_lan_subnet",
+        "type": "network_address",
+        "from": "branch_lan_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "hq_lan_mask",
+        "type": "netmask",
+        "from": "hq_lan_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "branch_lan_mask",
+        "type": "netmask",
+        "from": "branch_lan_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "hq_lan_router",
+        "type": "ip_offset",
+        "from": "hq_lan_ip",
+        "offset": 1
+      },
+      {
+        "key": "branch_lan_router",
+        "type": "ip_offset",
+        "from": "branch_lan_ip",
+        "offset": 1
+      },
+      {
+        "key": "hq_pc_ip",
+        "type": "ip_offset",
+        "from": "hq_lan_ip",
+        "offset": 10
+      },
+      {
+        "key": "branch_pc_ip",
+        "type": "ip_offset",
+        "from": "branch_lan_ip",
+        "offset": 10
+      }
+    ]
+  },
+  "verify": [
+    {
+      "node": "pfSense_HQ",
+      "command": "ipsec statusall",
+      "checks": [
+        {"label": "IPsec tunnel established on HQ", "contains": "ESTABLISHED"}
+      ]
+    },
+    {
+      "node": "pfSense_Branch", 
+      "command": "ipsec statusall",
+      "checks": [
+        {"label": "IPsec tunnel established on Branch", "contains": "ESTABLISHED"}
+      ]
+    }
+  ]
+}

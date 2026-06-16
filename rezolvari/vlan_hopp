@@ -1,0 +1,5 @@
+interface GigabitEthernet0/1
+ switchport trunk native vlan 999
+ switchport nonegotiate
+
+ pe ambele sw

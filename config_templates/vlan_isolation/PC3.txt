@@ -1,0 +1,2 @@
+ip {{pc3_ip}} {{router3_ip}} {{prefix}}
+save

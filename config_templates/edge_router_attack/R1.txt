@@ -1,0 +1,15 @@
+hostname {{router_name}}
+!
+no ip domain-lookup
+!
+interface Loopback0
+ description Management
+ ip address {{mgmt_ip}} 255.255.255.255
+ no shutdown
+!
+interface FastEthernet0/0
+ description LAN_to_Switch
+ ip address {{router_lan_ip}} {{subnet_mask}}
+ no shutdown
+!
+end

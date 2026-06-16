@@ -1,0 +1,24 @@
+hostname Switch1
+!
+no ip domain-lookup
+!
+vlan {{guest_id}}
+ name Guest_VLAN
+!
+vlan {{admin_id}}
+ name Admin_VLAN
+!
+interface GigabitEthernet0/0
+ description to_PC_Guest
+ switchport mode access
+ switchport access vlan {{guest_id}}
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description trunk_to_Switch2
+ switchport mode trunk
+ switchport trunk native vlan {{guest_id}}
+ switchport trunk allowed vlan {{guest_id}},{{admin_id}}
+ no shutdown
+!
+end

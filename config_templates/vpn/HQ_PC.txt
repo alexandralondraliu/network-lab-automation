@@ -1,0 +1,2 @@
+ip {{hq_pc_ip}} {{hq_lan_router}} {{prefix}}
+save

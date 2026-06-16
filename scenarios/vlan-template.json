@@ -1,0 +1,28 @@
+{
+  "scenario_name": "Enforcing Departmental Isolation",
+  "base_template": "Write a summary of an audit at {{company_name}}. The {{dept_1}} team (VLAN {{vlan1_id}}) should not have access to {{dept_3}} (VLAN {{vlan3_id}}), which stores sensitive {{data_type}}. Use VLANs to ensure isolation between all three departments.",
+  "generation_rules": {
+    "company_name": {
+      "instruction": "Generate a unique tech or finance firm name"
+    },
+    "data_type": {
+      "instruction": "Pick one: Employee PII or Financial Records"
+    },
+    "dept_1": { "instruction": "Generate a department name", "anchor_node": "PC1" },
+    "dept_2": { "instruction": "Generate a department name", "anchor_node": "PC2" },
+    "dept_3": { "instruction": "Generate a department name", "anchor_node": "PC3" },
+    "vlan1_id": { "instruction": "Generate a VLAN ID between 10 and 50" },
+    "vlan2_id": { "instruction": "Generate a VLAN ID between 51 and 100" },
+    "vlan3_id": { "instruction": "Generate a VLAN ID between 101 and 150" },
+    "vlan1_ip": {
+      "instruction": "Generate a private IP in 10.x.x.x, last octet between 50-150 (avoid .1 and .10). Must be in a different /24 than vlan2_ip and vlan3_ip"
+    },
+    "vlan2_ip": {
+      "instruction": "Generate a private IP in 172.16.x.x, last octet between 50-150 (avoid .1 and .10). Must be in a different /24 than vlan1_ip and vlan3_ip"
+    },
+    "vlan3_ip": {
+      "instruction": "Generate a private IP in 192.168.x.x, last octet between 50-150 (avoid .1 and .10). Must be in a different /24 than vlan1_ip and vlan2_ip"
+    }
+  },
+  "expected_solution": "Create VLANs on Switch, configure subinterfaces on R1 with encapsulation dot1Q, and apply inbound ACLs to block dept_1 (VLAN1) from reaching dept_3 (VLAN3)."
+}

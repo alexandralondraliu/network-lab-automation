@@ -1,0 +1,149 @@
+{
+  "lab_id": "vlan_isolation",
+  "project_id": "d39ae0c5-f89e-44a1-926f-441604b29081",
+  "nodes": {
+    "R1": {
+      "template": "R1.txt",
+      "type": "cisco"
+    },
+    "Switch": {
+      "template": "Switch.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "PC1": {
+      "template": "PC1.txt",
+      "type": "vpcs"
+    },
+    "PC2": {
+      "template": "PC2.txt",
+      "type": "vpcs"
+    },
+    "PC3": {
+      "template": "PC3.txt",
+      "type": "vpcs"
+    }
+  },
+  "build": {
+    "from_llm": [
+      "company_name",
+      "data_type",
+      "dept_1",
+      "dept_2",
+      "dept_3",
+      "vlan1_id",
+      "vlan2_id",
+      "vlan3_id",
+      "vlan1_ip",
+      "vlan2_ip",
+      "vlan3_ip"
+    ],
+    "derived": [
+      {
+        "key": "dept_1_slug",
+        "type": "slugify",
+        "from": "dept_1"
+      },
+      {
+        "key": "dept_2_slug",
+        "type": "slugify",
+        "from": "dept_2"
+      },
+      {
+        "key": "dept_3_slug",
+        "type": "slugify",
+        "from": "dept_3"
+      },
+      {
+        "key": "subnet_mask",
+        "type": "static",
+        "value": "255.255.255.0"
+      },
+      {
+        "key": "prefix",
+        "type": "static",
+        "value": "24"
+      },
+      {
+        "key": "vlan1_subnet",
+        "type": "network_address",
+        "from": "vlan1_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "vlan2_subnet",
+        "type": "network_address",
+        "from": "vlan2_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "vlan3_subnet",
+        "type": "network_address",
+        "from": "vlan3_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "router1_ip",
+        "type": "ip_offset",
+        "from": "vlan1_ip",
+        "offset": 1
+      },
+      {
+        "key": "router2_ip",
+        "type": "ip_offset",
+        "from": "vlan2_ip",
+        "offset": 1
+      },
+      {
+        "key": "router3_ip",
+        "type": "ip_offset",
+        "from": "vlan3_ip",
+        "offset": 1
+      },
+      {
+        "key": "pc1_ip",
+        "type": "ip_offset",
+        "from": "vlan1_ip",
+        "offset": 10
+      },
+      {
+        "key": "pc2_ip",
+        "type": "ip_offset",
+        "from": "vlan2_ip",
+        "offset": 10
+      },
+      {
+        "key": "pc3_ip",
+        "type": "ip_offset",
+        "from": "vlan3_ip",
+        "offset": 10
+      }
+    ]
+  },
+  "verify": [
+    {
+      "node": "R1",
+      "command": "show ip access-lists",
+      "checks": [
+        {
+          "label": "ACL configured on R1 with deny rule",
+          "contains": "deny"
+        },
+        {
+          "label": "Subnet VLAN3 ({{vlan3_subnet}}) blocked in ACL",
+          "contains": "{{vlan3_subnet}}"
+        }
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | include access-group",
+      "checks": [
+        {
+          "label": "ACL applied on a port",
+          "contains": "access-group"
+        }
+      ]
+    }
+  ]
+}

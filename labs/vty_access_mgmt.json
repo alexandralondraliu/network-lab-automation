@@ -1,0 +1,86 @@
+{
+  "lab_id": "vty_access_mgmt",
+  "project_id": "9c54ece3-e9ba-441d-8e63-47396949558c",
+  "nodes": {
+    "R1": {
+      "template": "R1.txt",
+      "type": "cisco"
+    },
+    "Switch": {
+      "template": "Switch.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "Admin_PC": {
+      "template": "Admin_PC.txt",
+      "type": "alma"
+    },
+    "Attacker_PC": {
+      "template": "Attacker_PC.txt",
+      "type": "alma"
+    }
+  },
+  "build": {
+    "from_llm": [
+      "mgmt_ip",
+      "acl_number"
+    ],
+    "derived": [
+      {
+        "key": "prefix",
+        "type": "static",
+        "value": "24"
+      },
+      {
+        "key": "subnet_mask",
+        "type": "netmask",
+        "from": "mgmt_ip",
+        "prefix": "24"
+      },
+      {
+        "key": "router_lan_ip",
+        "type": "ip_offset",
+        "from": "mgmt_ip",
+        "offset": 1
+      },
+      {
+        "key": "attacker_ip",
+        "type": "ip_offset",
+        "from": "mgmt_ip",
+        "offset": 20
+      }
+    ]
+  },
+  "verify": [
+    {
+      "node": "R1",
+      "command": "show running-config | section line vty",
+      "checks": [
+        {
+          "label": "ACL applied on VTY w access-class",
+          "contains": "access-class"
+        }
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show ip access-lists",
+      "checks": [
+        {
+          "label": "Admin_PC  IP ({{mgmt_ip}}) allowed in ACL",
+          "contains": "{{mgmt_ip}}"
+        }
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | include access-list {{acl_number}}",
+      "checks": [
+        {
+          "label": "ACL {{acl_number}} configured on router",
+          "contains": "{{acl_number}}"
+        }
+      ]
+    }
+  ]
+}

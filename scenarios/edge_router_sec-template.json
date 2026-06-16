@@ -1,0 +1,11 @@
+{
+  "scenario_name": "Edge Router Hardening and Malicious Proxy Blocking",
+  "base_template": "Write a compliance report. Suspicious transfers to a malicious proxy at {{malicious_ip}} were detected originating from the LAN {{lan_ip}}. You must secure the perimeter between {{start_time}} and {{end_time}} by allowing only HTTPS and DNS.",
+  "generation_rules": {
+    "malicious_ip": { "instruction": "Generate a random malicious-looking public IP (e.g. 185.x.x.x, 91.x.x.x, 45.x.x.x)", "anchor_node": "R1" },
+    "lan_ip":       { "instruction": "Generate a private LAN IP in 10.x.x.x or 172.16.x.x range, last octet between 50-200", "anchor_node": "PC1" },
+    "start_time":   "08:00",
+    "end_time":     "18:00"
+  },
+  "expected_solution": "Configure a time-range, an Extended ACL blocking malicious_ip and permitting only ports 443 and 53, then apply it inbound on GigabitEthernet2/0."
+}

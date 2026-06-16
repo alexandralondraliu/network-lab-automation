@@ -1,0 +1,2 @@
+ip {{victim1_ip}} {{gateway_ip}} {{prefix}}
+save

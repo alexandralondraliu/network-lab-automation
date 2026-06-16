@@ -1,0 +1,2 @@
+dhcp -h PC2
+save

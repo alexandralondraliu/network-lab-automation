@@ -1,0 +1,12 @@
+hostname R1
+!
+no ip domain-lookup
+!
+ip name-server {{phishing_ip}}
+!
+interface GigabitEthernet1/0
+ description LAN_to_Switch
+ ip address {{r1_lan_ip}} {{subnet_mask}}
+ no shutdown
+!
+end

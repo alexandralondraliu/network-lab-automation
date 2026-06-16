@@ -1,0 +1,11 @@
+time-range WORK_HOURS
+ periodic weekdays 08:00 to 18:00
+
+ip access-list extended ACL_OUTSIDE
+ deny ip any host <malicious_ip> time-range WORK_HOURS
+ permit tcp any any eq 443
+ permit udp any any eq 53
+ deny ip any any
+
+interface GigabitEthernet2/0
+ ip access-group ACL_OUTSIDE in

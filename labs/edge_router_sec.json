@@ -1,0 +1,49 @@
+{
+  "lab_id": "edge_router_sec",
+  "project_id": "a6f75ed7-e63e-4eaa-878c-ebced3a6dda5",
+  "nodes": {
+    "R1":     {"template": "R1.txt",     "type": "cisco"},
+    "Switch": {"template": "Switch.txt", "type": "cisco", "role": "switch"},
+    "PC1":    {"template": "PC1.txt",    "type": "vpcs"}
+  },
+  "build": {
+    "from_llm": ["malicious_ip", "start_time", "end_time", "lan_ip"],
+    "derived": [
+      {"key": "prefix",        "type": "static",          "value": "24"},
+      {"key": "subnet_mask",   "type": "netmask",         "from": "lan_ip", "prefix": "24"},
+      {"key": "router_lan_ip", "type": "ip_offset",       "from": "lan_ip", "offset": 1},
+      {"key": "pc1_ip",        "type": "ip_offset",       "from": "lan_ip", "offset": 10}
+    ]
+  },
+  "verify": [
+    {
+      "node": "R1",
+      "command": "show running-config | include {{malicious_ip}}",
+      "checks": [
+        {"label": "Malicious IP {{malicious_ip}} blocked in ACL", "contains": "{{malicious_ip}}"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | include time-range",
+      "checks": [
+        {"label": "Time-range configured", "contains": "time-range"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show ip access-lists",
+      "checks": [
+        {"label": "Port 443 (HTTPS) allowed in ACL", "contains": "443"},
+        {"label": "Port 53 (DNS) allowed in ACL",    "contains": "53"}
+      ]
+    },
+    {
+      "node": "R1",
+      "command": "show running-config | section interface GigabitEthernet2/0",
+      "checks": [
+        {"label": "ACL applied on outside port (Gi2/0)", "contains": "ip access-group"}
+      ]
+    }
+  ]
+}

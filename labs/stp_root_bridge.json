@@ -1,0 +1,68 @@
+{
+  "lab_id": "stp_root_bridge",
+  "project_id": "30d9570e-9737-45f6-b1c5-e951051eabee",
+  "nodes": {
+    "Switch1": {
+      "template": "Switch1.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "Switch2": {
+      "template": "Switch2.txt",
+      "type": "cisco",
+      "role": "switch"
+    },
+    "PC1": {
+      "template": "PC1.txt",
+      "type": "vpcs"
+    },
+    "PC2": {
+      "template": "PC2.txt",
+      "type": "vpcs"
+    },
+    "AlmaLinux-1": {
+      "template": "AlmaLinux-1.txt",
+      "type": "alma"
+    }
+  },
+  "build": {
+    "from_llm": [
+      "location",
+      "vlan_id",
+      "priority"
+    ],
+    "derived": []
+  },
+  "verify": [
+    {
+      "node": "Switch2",
+      "command": "show running-config | include bpduguard",
+      "checks": [
+        {
+          "label": "BPDU Guard enabled on access ports",
+          "contains": "bpduguard"
+        }
+      ]
+    },
+    {
+      "node": "Switch2",
+      "command": "show running-config | include guard root",
+      "checks": [
+        {
+          "label": "Root Guard enabled on uplink port",
+          "contains": "guard root"
+        }
+      ]
+    },
+    {
+      "node": "Switch1",
+      "command": "show spanning-tree vlan {{vlan_id}}",
+      "checks": [
+        {
+          "label": "Switch1 is Root Bridge for VLAN {{vlan_id}}",
+          "contains": "This bridge is the root"
+        }
+      ]
+    }
+  ]
+}

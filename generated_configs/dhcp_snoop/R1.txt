@@ -1,0 +1,21 @@
+hostname R1
+!
+no ip domain-lookup
+!
+interface FastEthernet0/0
+ description LAN_toward_Switch
+ ip address 172.16.45.1 255.255.255.0
+ ip helper-address 172.16.45.1
+ no shutdown
+!
+interface GigabitEthernet1/0
+ description toward_DHCP-SRV
+ ip address 172.16.45.253 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet2/0
+ description toward_DHCP-BKP
+ ip address 172.16.45.254 255.255.255.0
+ no shutdown
+!
+end
