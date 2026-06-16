@@ -1,55 +1,29 @@
-structura:
+# network-lab-automation
 
-1. INTRO
-- Context: nevoia de laborator practic în educația de networking/cybersec
-- Problema: exercițiile statice, repetitive, costisitoare de creat
-- Obiective: automatizare prin LLM + GNS3
-- Soluția propusă: descriere scurtă a sistemului
-- Rezultate: 13 laboratoare funcționale
-- Structura lucrării
+Automated generation of networking and cybersecurity lab exercises using Mistral AI and GNS3.
 
-2. STATE OF THE ART - DONE
-- studiu despre ce au facut altii
+Each run produces a unique scenario with different IP addresses, MAC addresses, and incident narrative. Device configurations are pushed to GNS3 via Telnet, and a verification script checks the student's solution automatically.
 
-3. BACKGROUND (Tehnologii folosite) + citare
-- GNS3, Cisco IOS, VPCS, Alma Linux, pfSense
-- Mistral AI / LLM
-- Python (telnetlib, requests)
-- JSON ca limbaj de configurare
+## Usage
 
+**Generate a lab:**
+```bash
+python main.py
+```
 
+**Verify the student's solution:**
+```bash
+python test.py
+```
 
-4. ARCHITECTURE - GENERIC/ABSTRACTA - ce am vrut sa faca proiectul- abstract si generic
-- info generale despre solutie + diagrama flow CE VREAU SA FAC
-- de explicat structura json urilor (Sistemul de placeholder-e {{}})
-- integrare llm si prompt engineering
+Set `FILE_TO_TEST` in `main.py` to select the active lab, and configure `GNS3_IP` and `API_KEY` with your GNS3 VM address and Mistral AI key.
 
+## Requirements
 
-5. IMPLEMENTARE - AICI TREBUIE SA MENTIONEZ TEHNOLOGII
-- evolutie pe parcurs
-- challenges (ex. kali linux)
-- de explicat codul
-- componente (ce face fiecare fisier)
+- Python 3.12+
+- GNS3 VM with Cisco IOSv, IOSv-L2, Alma Linux 9 images
+- Mistral AI API key
 
+## Adding a New Lab
 
-6. EVALUARE - arat ca functioneaza
-- prezentat cele 13 laboratoare - de grupat sa nu fie 13 subcapitole
-- Validarea scenariilor generate
-- Testarea verificării automate per lab
-- Testarea si validarea cu un coleg - de vazut
-- Comparație cu platformele din Cap. 2
-
-7. CONCLUZII
-- future work
-- cum se poate imbunatati
-
-ANEXE
-- documentare creare noduri de la 0 
-
-- 4 5 6 = 25 pag
-- 20 cites 
-
-- de schimbat numele folsertului scenarii in lab_generator
-
-- cap 1 done
-
+Create a scenario template in `scenarios/`, a rules file in `labs/`, and configuration templates in `config_templates/<lab_id>/`. No Python changes required.
